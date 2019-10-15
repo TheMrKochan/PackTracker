@@ -111,6 +111,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CardSelector.xaml.cs">
+      <DependentUpon>CardSelector.xaml</DependentUpon>
+      <Generator>MSBuild:Compile</Generator>
+    </Compile>
+    <Compile Include="Controls\ManualPackInsert.xaml.cs">
+      <DependentUpon>ManualPackInsert.xaml</DependentUpon>
+      <Generator>MSBuild:Compile</Generator>
+    </Compile>
     <Compile Include="Controls\PityTimer\BarChartSingle.xaml.cs">
       <DependentUpon>BarChartSingle.xaml</DependentUpon>
     </Compile>
@@ -185,9 +193,15 @@
     <Compile Include="Update\Updater.cs" />
     <Compile Include="View\AbstractValueConverter.cs" />
     <Compile Include="View\Cache\PityTimerRepository.cs" />
+    <Compile Include="View\CardViewModel.cs">
+      <Generator>MSBuild:Compile</Generator>
+    </Compile>
     <Compile Include="View\DateConverter.cs" />
     <Compile Include="View\DateTimeConverter.cs" />
     <Compile Include="View\DecimalConverter.cs" />
+    <Compile Include="View\ManualPackInsert.cs">
+      <Generator>MSBuild:Compile</Generator>
+    </Compile>
     <Compile Include="View\PackNameConverter.cs" />
     <Compile Include="View\Average.cs" />
     <Compile Include="View\AverageCollection.cs" />
@@ -199,6 +213,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CardSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -215,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Log.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ManualPackInsert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

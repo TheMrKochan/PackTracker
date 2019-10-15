@@ -13,7 +13,7 @@ namespace PackTracker.View
     internal class PackNameConverter : IValueConverter
     {
         private static Config _config = Config.Instance;
-        private static Dictionary<int, Dictionary<Locale, string>> PackNames;
+        internal static Dictionary<int, Dictionary<Locale, string>> PackNames;
         static PackNameConverter()
         {
             using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("PackTracker.Resources.packs.json"))

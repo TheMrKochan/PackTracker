@@ -21,7 +21,7 @@ namespace PackTracker
         private View.AverageCollection _averageCollection;
         private View.Cache.PityTimerRepository _pityTimers;
 
-        public static Version CurrentVersion { get; } = new Version("1.4.1");
+        public static Version CurrentVersion { get; } = new Version("1.4.2");
 
         public Plugin()
         {
@@ -83,7 +83,7 @@ namespace PackTracker
                 Menu.mnu_Log.Click += (sender, e) => this._windows.ShowLogWin(this._history);
                 Menu.mnu_Search.Click += (sender, e) => this._windows.ShowSearchWin(this._history);
                 Menu.mnu_PityTimers.Click += (sender, e) => this._windows.ShowPityWin(this._history, this._pityTimers);
-
+                Menu.mnu_ManualInsert.Click += (sender, e) => _windows.ShowManualInsertWin(_history);
                 return Menu;
             }
         }

@@ -50,6 +50,7 @@
                 <StackPanel>
                     <TextBlock FontFamily="{StaticResource FontFamily}" Background="{StaticResource HeadlineBackground}" Foreground="{StaticResource Foreground}" FontSize="{StaticResource HeadlineFontSize}" Padding="2,0">Modded:</TextBlock>
                     <TextBlock FontFamily="{StaticResource FontFamily}" Foreground="{StaticResource Foreground}" Padding="2,0">SGKoishi &lt;<Hyperlink NavigateUri="http://github.com/sgkoishi/" RequestNavigate="Hyperlink_RequestNavigate">GitHub@SGKoishi</Hyperlink>&gt;</TextBlock>
+                    <TextBlock FontFamily="{StaticResource FontFamily}" Foreground="{StaticResource Foreground}" Padding="2,0">Ellekappae &lt;<Hyperlink NavigateUri="http://github.com/Ellekappae/" RequestNavigate="Hyperlink_RequestNavigate">GitHub@Ellekappae</Hyperlink>&gt;</TextBlock>
                 </StackPanel>
             </Border>
         </StackPanel>
