@@ -34,7 +34,16 @@ namespace PackTracker {
 
       foreach(var Card in e.Cards) {
         HDTCard cardFromId = Database.GetCardFromId(Card.Id);
-        Cards.Add(new Entity.Card(cardFromId, 1 == Card.PremiumType));
+        bool isPremium;
+        try
+        {
+            isPremium = ((dynamic)Card).Premium;
+        }
+        catch
+        {
+            isPremium = ((dynamic)Card).PremiumType == 1;
+        }
+        Cards.Add(new Entity.Card(cardFromId, isPremium));
       }
 
       OnPackOpened(new Pack(e.PackId, Time, Cards));

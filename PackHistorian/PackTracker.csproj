@@ -50,33 +50,44 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HearthDb, Version=8.2.0.19506, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.11.1\HearthDb.dll</HintPath>
+    <Reference Include="HearthDb">
+      <HintPath>..\HDT\Hearthstone Deck Tracker\HearthDb.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="HearthMirror, Version=17.0.2.45932, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="HearthMirror">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.14.4\HearthMirror.dll</HintPath>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\HearthMirror.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="HearthstoneDeckTracker, Version=1.4.0.3216, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="HearthstoneDeckTracker">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.11.1\HearthstoneDeckTracker.exe</HintPath>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\HearthstoneDeckTracker.exe</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="HearthWatcher, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="HearthWatcher">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.11.1\HearthWatcher.dll</HintPath>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\HearthWatcher.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="LiveCharts, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+    <Reference Include="LiveCharts">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.11.1\LiveCharts.dll</HintPath>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\LiveCharts.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="LiveCharts.Wpf, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+    <Reference Include="LiveCharts.Wpf">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.11.1\LiveCharts.Wpf.dll</HintPath>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\LiveCharts.Wpf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=1.1.2.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+    <Reference Include="MahApps.Metro">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.11.1\MahApps.Metro.dll</HintPath>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\MahApps.Metro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -93,9 +104,10 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="XAMLMarkupExtensions, Version=1.2.1.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="XAMLMarkupExtensions">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Fetti\AppData\Local\HearthstoneDeckTracker\app-1.11.1\XAMLMarkupExtensions.dll</HintPath>
+      <HintPath>..\HDT\Hearthstone Deck Tracker\XAMLMarkupExtensions.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +295,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\if_circle-help-question-mark-glyph_763459.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\packs.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

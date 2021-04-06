@@ -1,0 +1,33 @@
+name: GitHub CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Setup HDT
+        shell: pwsh
+        run: |
+          Invoke-WebRequest https://mirror.sgkoi.dev/HDT -OutFile HDT.zip
+          Expand-Archive HDT.zip
+          Rename-Item '.\HDT\Hearthstone Deck Tracker\Hearthstone Deck Tracker.exe' HearthstoneDeckTracker.exe
+
+      - name: Build
+        shell: pwsh
+        run: |
+          msbuild PackTracker.sln
+
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
+        with:
+          name: Artifact
+          path: PackHistorian/bin/Debug
