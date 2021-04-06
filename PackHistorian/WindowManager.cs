@@ -1,136 +1,156 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using PackTracker.Controls;
+﻿using PackTracker.Controls;
 using PackTracker.Storage;
 using PackTracker.View.Cache;
+using System;
+using System.Windows;
 
-namespace PackTracker {
+namespace PackTracker
+{
+    internal class WindowManager
+    {
+        private string _name;
+        private Window _pityWin, _statisticWin, _historyWin, _logWin, _searchWin, _pityOverlay;
 
-  class WindowManager {
-    string _name;
-    Window _pityWin, _statisticWin, _historyWin, _logWin, _searchWin, _pityOverlay;
-
-    public WindowManager(string name) {
-      _name = name;
-    }
-
-    public void ShowPityWin(History History, PityTimerRepository PityTimers) {
-      if(_pityWin == null) {
-        _pityWin = new Controls.PityTimer.PityTimer(History, PityTimers) {
-          Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
-        };
-        _pityWin.Closed += (sender, e) => _pityWin = null;
-        _pityWin.Loaded += (sender, e) => _pityWin.Title = _name + ": " + _pityWin.Title;
-
-        _pityWin.Show();
-      }
-
-      _pityWin.Focus();
-    }
-
-    public void ShowStatisticWin(History History) {
-      if(_statisticWin == null) {
-        _statisticWin = new Statistic(History) {
-          Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
-        };
-        _statisticWin.Closed += (sender, e) => _statisticWin = null;
-        _statisticWin.Loaded += (sender, e) => _statisticWin.Title = _name + ": " + _statisticWin.Title;
-
-        _statisticWin.Show();
-      }
-
-      _statisticWin.Focus();
-    }
-
-    public void ShowHistoryWin(History History) {
-      if(_historyWin == null) {
-        _historyWin = new Controls.History(History, new HistoryDatePicker(History)) {
-          Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
-        };
-        _historyWin.Closed += (sender, e) => { _historyWin = null; };
-        _historyWin.Loaded += (sender, e) => _historyWin.Title = _name + ": " + _historyWin.Title;
-
-        _historyWin.Show();
-      }
-
-      _historyWin.Focus(); ;
-    }
-
-    public void ShowLogWin(History History) {
-      if(_logWin == null) {
-        _logWin = new Log(History) {
-          Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
-        };
-        _logWin.Closed += (sender, e) => _logWin = null;
-        _logWin.Loaded += (sender, e) => _logWin.Title = _name + ": " + _logWin.Title;
-
-        _logWin.Show();
-      }
-
-      _logWin.Focus();
-    }
-
-    public void ShowSearchWin(History History) {
-      if(_searchWin == null) {
-        _searchWin = new Search(History) {
-          Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
-        };
-        _searchWin.Closed += (sender, e) => _searchWin = null;
-        _searchWin.Loaded += (sender, e) => _searchWin.Title = _name + ": " + _searchWin.Title;
-
-        _searchWin.Show();
-      }
-
-      _searchWin.Focus();
-    }
-
-    public void ShowSettingsWin(Settings Settings, ISettingsStorage SettingsStorage, Type PreSelection = null) {
-      Controls.Settings.Settings Win = new Controls.Settings.Settings(Settings) {
-        Owner = Hearthstone_Deck_Tracker.Core.MainWindow
-      };
-      Win.Closed += (sender, e) => SettingsStorage.Store(Settings);
-      Win.Title = _name + ": " + Win.Title;
-
-      if(PreSelection != null) {
-        foreach(var Item in Win.lb_tabs.Items) {
-          if(Item.GetType() == PreSelection) {
-            Win.lb_tabs.SelectedItem = Item;
-            break;
-          }
+        public WindowManager(string name)
+        {
+            this._name = name;
         }
-      }
 
-      Win.ShowDialog();
+        public void ShowPityWin(History History, PityTimerRepository PityTimers)
+        {
+            if (this._pityWin == null)
+            {
+                this._pityWin = new Controls.PityTimer.PityTimer(History, PityTimers)
+                {
+                    Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
+                };
+                this._pityWin.Closed += (sender, e) => this._pityWin = null;
+                this._pityWin.Loaded += (sender, e) => this._pityWin.Title = this._name + ": " + this._pityWin.Title;
+
+                this._pityWin.Show();
+            }
+
+            this._pityWin.Focus();
+        }
+
+        public void ShowStatisticWin(History History)
+        {
+            if (this._statisticWin == null)
+            {
+                this._statisticWin = new Statistic(History)
+                {
+                    Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
+                };
+                this._statisticWin.Closed += (sender, e) => this._statisticWin = null;
+                this._statisticWin.Loaded += (sender, e) => this._statisticWin.Title = this._name + ": " + this._statisticWin.Title;
+
+                this._statisticWin.Show();
+            }
+
+            this._statisticWin.Focus();
+        }
+
+        public void ShowHistoryWin(History History)
+        {
+            if (this._historyWin == null)
+            {
+                this._historyWin = new Controls.History(History, new HistoryDatePicker(History))
+                {
+                    Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
+                };
+                this._historyWin.Closed += (sender, e) => this._historyWin = null;
+                this._historyWin.Loaded += (sender, e) => this._historyWin.Title = this._name + ": " + this._historyWin.Title;
+
+                this._historyWin.Show();
+            }
+
+            this._historyWin.Focus(); ;
+        }
+
+        public void ShowLogWin(History History)
+        {
+            if (this._logWin == null)
+            {
+                this._logWin = new Log(History)
+                {
+                    Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
+                };
+                this._logWin.Closed += (sender, e) => this._logWin = null;
+                this._logWin.Loaded += (sender, e) => this._logWin.Title = this._name + ": " + this._logWin.Title;
+
+                this._logWin.Show();
+            }
+
+            this._logWin.Focus();
+        }
+
+        public void ShowSearchWin(History History)
+        {
+            if (this._searchWin == null)
+            {
+                this._searchWin = new Search(History)
+                {
+                    Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
+                };
+                this._searchWin.Closed += (sender, e) => this._searchWin = null;
+                this._searchWin.Loaded += (sender, e) => this._searchWin.Title = this._name + ": " + this._searchWin.Title;
+
+                this._searchWin.Show();
+            }
+
+            this._searchWin.Focus();
+        }
+
+        public void ShowSettingsWin(Settings Settings, ISettingsStorage SettingsStorage, Type PreSelection = null)
+        {
+            var Win = new Controls.Settings.Settings(Settings)
+            {
+                Owner = Hearthstone_Deck_Tracker.Core.MainWindow
+            };
+            Win.Closed += (sender, e) => SettingsStorage.Store(Settings);
+            Win.Title = this._name + ": " + Win.Title;
+
+            if (PreSelection != null)
+            {
+                foreach (var Item in Win.lb_tabs.Items)
+                {
+                    if (Item.GetType() == PreSelection)
+                    {
+                        Win.lb_tabs.SelectedItem = Item;
+                        break;
+                    }
+                }
+            }
+
+            Win.ShowDialog();
+        }
+
+        public void ShowPityTimerOverlay(History History, PityTimerRepository PityTimers)
+        {
+            if (this._pityOverlay == null)
+            {
+                this._pityOverlay = new Controls.PityTimer.PityTimerOverlay(History, PityTimers);
+                Hearthstone_Deck_Tracker.Core.MainWindow.Closed += this.ClosePityTimerOverlay;
+                this._pityOverlay.Closed += (sender, e) => this._pityOverlay = null;
+            }
+
+            this._pityOverlay.Show();
+        }
+
+        private void ClosePityTimerOverlay(object sender, EventArgs e)
+        {
+            this.ClosePityTimerOverlay();
+        }
+
+        public void ClosePityTimerOverlay()
+        {
+            if (this._pityOverlay != null)
+            {
+                this._pityOverlay.Dispatcher.Invoke(() => this._pityOverlay.Close());
+
+                this._pityOverlay = null;
+                Hearthstone_Deck_Tracker.Core.MainWindow.Closed -= this.ClosePityTimerOverlay;
+            }
+        }
     }
-
-    public void ShowPityTimerOverlay(History History, PityTimerRepository PityTimers) {
-      if(_pityOverlay == null) {
-        _pityOverlay = new Controls.PityTimer.PityTimerOverlay(History, PityTimers);
-        Hearthstone_Deck_Tracker.Core.MainWindow.Closed += ClosePityTimerOverlay;
-        _pityOverlay.Closed += (sender, e) => _pityOverlay = null;
-      }
-
-      _pityOverlay.Show();
-    }
-
-    private void ClosePityTimerOverlay(object sender, EventArgs e) {
-      ClosePityTimerOverlay();
-    }
-
-    public void ClosePityTimerOverlay() {
-      if(_pityOverlay != null) {
-          _pityOverlay.Dispatcher.Invoke(() => {
-            _pityOverlay.Close();
-          });
-
-          _pityOverlay = null;
-          Hearthstone_Deck_Tracker.Core.MainWindow.Closed -= ClosePityTimerOverlay;
-      }
-    }
-  }
 }

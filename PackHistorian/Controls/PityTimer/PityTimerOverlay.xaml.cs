@@ -1,70 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using HearthDb.Enums;
+﻿using HearthDb.Enums;
 using PackTracker.Entity;
 using PackTracker.View.Cache;
+using System;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Interop;
 
-namespace PackTracker.Controls.PityTimer {
-  /// <summary>
-  /// Interaktionslogik für PityTimerOverlay.xaml
-  /// </summary>
-  public partial class PityTimerOverlay : Window, INotifyPropertyChanged {
-    int? _packId = null;
+namespace PackTracker.Controls.PityTimer
+{
+    /// <summary>
+    /// Interaktionslogik für PityTimerOverlay.xaml
+    /// </summary>
+    public partial class PityTimerOverlay : Window, INotifyPropertyChanged
+    {
+        public int? PackId { get; private set; } = null;
 
-    public int? PackId => _packId;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    public event PropertyChangedEventHandler PropertyChanged;
-    void OnPropertyChanged(string prop) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-
-    public PityTimerOverlay(PackTracker.History History, PityTimerRepository PityTimers) {
-      InitializeComponent();
-      DataContext = this;
-
-      if(History.Count > 0) {
-        _packId = History.Last().Id;
-        Chart_Epic.DataContext = PityTimers.GetPityTimer((int)_packId, Rarity.EPIC, false, true);
-        Chart_Leg.DataContext = PityTimers.GetPityTimer((int)_packId, Rarity.LEGENDARY, false, true);
-      }
-
-      History.CollectionChanged += (sender, e) => {
-        foreach(Pack Pack in e.NewItems) {
-          Chart_Epic.DataContext = PityTimers.GetPityTimer(Pack.Id, Rarity.EPIC, false, true);
-          Chart_Leg.DataContext = PityTimers.GetPityTimer(Pack.Id, Rarity.LEGENDARY, false, true);
-          _packId = Pack.Id;
+        private void OnPropertyChanged(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
-        OnPropertyChanged("PackId");
-      };
-    }
+        public PityTimerOverlay(PackTracker.History History, PityTimerRepository PityTimers)
+        {
+            this.InitializeComponent();
+            this.DataContext = this;
 
-    private void UniformGrid_Loaded(object sender, RoutedEventArgs e) {
-      SetPosition();
-    }
+            if (History.Count > 0)
+            {
+                this.PackId = History.Last().Id;
+                this.Chart_Epic.DataContext = PityTimers.GetPityTimer((int)this.PackId, Rarity.EPIC, false, true);
+                this.Chart_Leg.DataContext = PityTimers.GetPityTimer((int)this.PackId, Rarity.LEGENDARY, false, true);
+            }
 
-    private void SetPosition() {
-      double relativeRight = .01;
-      double relativeBottom = .35;
-      
-      Left = SystemParameters.PrimaryScreenWidth - (SystemParameters.PrimaryScreenWidth * relativeRight) - Width;
-      Top = SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight * relativeBottom) - Height;
-    }
+            History.CollectionChanged += (sender, e) =>
+            {
+                foreach (Pack Pack in e.NewItems)
+                {
+                    this.Chart_Epic.DataContext = PityTimers.GetPityTimer(Pack.Id, Rarity.EPIC, false, true);
+                    this.Chart_Leg.DataContext = PityTimers.GetPityTimer(Pack.Id, Rarity.LEGENDARY, false, true);
+                    this.PackId = Pack.Id;
+                }
 
-    private void Window_SourceInitialized(object sender, EventArgs e) {
-      WindowInteropHelper helper = new WindowInteropHelper(this);
-      Hearthstone_Deck_Tracker.User32.SetWindowExStyle(helper.Handle, Hearthstone_Deck_Tracker.User32.WsExTransparent | Hearthstone_Deck_Tracker.User32.WsExToolWindow);
+                this.OnPropertyChanged("PackId");
+            };
+        }
+
+        private void UniformGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.SetPosition();
+        }
+
+        private void SetPosition()
+        {
+            var relativeRight = .01;
+            var relativeBottom = .35;
+
+            this.Left = SystemParameters.PrimaryScreenWidth - (SystemParameters.PrimaryScreenWidth * relativeRight) - this.Width;
+            this.Top = SystemParameters.PrimaryScreenHeight - (SystemParameters.PrimaryScreenHeight * relativeBottom) - this.Height;
+        }
+
+        private void Window_SourceInitialized(object sender, EventArgs e)
+        {
+            var helper = new WindowInteropHelper(this);
+            Hearthstone_Deck_Tracker.User32.SetWindowExStyle(helper.Handle, Hearthstone_Deck_Tracker.User32.WsExTransparent | Hearthstone_Deck_Tracker.User32.WsExToolWindow);
+        }
     }
-  }
 }

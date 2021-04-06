@@ -1,115 +1,123 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using LiveCharts;
+﻿using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Media;
 
-namespace PackTracker.Controls.PityTimer {
-  /// <summary>
-  /// Interaktionslogik für BarChart.xaml
-  /// </summary>
-  public partial class BarChartPrev : UserControl, INotifyPropertyChanged {
-    SeriesCollection _sc;
-    ColumnSeries _cs;
-    ObservableValue _currTimer = new ObservableValue(0);
-    ChartValues<ObservableValue> _prevTimer = new ChartValues<ObservableValue>();
+namespace PackTracker.Controls.PityTimer
+{
+    /// <summary>
+    /// Interaktionslogik für BarChart.xaml
+    /// </summary>
+    public partial class BarChartPrev : UserControl, INotifyPropertyChanged
+    {
+        private ColumnSeries _cs;
+        private ObservableValue _currTimer = new ObservableValue(0);
+        private ChartValues<ObservableValue> _prevTimer = new ChartValues<ObservableValue>();
+        private Brush _fillOrig, _fillPrev, _fillCurr;
 
-    Brush _fillOrig, _fillPrev, _fillCurr;
-
-    public SeriesCollection Prev { get => _sc; }
-    public Brush Fill { set {
-        _fillPrev = value.Clone();
-        _fillPrev.Opacity = .9;
-        _fillCurr = value.Clone();
-        _fillCurr.Opacity = .5;
-        _fillOrig = value;
-    } }
-
-    public int SoftThreshold { get; set; }
-    public int Threshold { get; set; }
-    public int? Average { get => DataContext is View.PityTimer ? ((View.PityTimer)DataContext).Average : null; }
-    public string XTitle { get; set; }
-    public string YTitle { get; set; }
-    public double? MaxValue { get; set; }
-
-    public BarChartPrev() {
-      InitializeComponent();
-      Chart.DataContext = this;
-
-      CartesianMapper<ObservableValue> mapper = Mappers.Xy<ObservableValue>()
-        .Fill((x, y) => x == _currTimer ? _fillCurr : _fillPrev)
-        .Y((obs, y) => obs.Value)
-        .X((obs, x) => x)
-      ;
-      _cs = new ColumnSeries(mapper) {
-        Values = _prevTimer,
-      };
-
-      _sc = new SeriesCollection() {
-        _cs,
-      };
-
-      DataContextChanged += (sender, e) => {
-        _prevTimer.Clear();
-
-        if(e.NewValue is View.PityTimer) {
-          View.PityTimer pt = (View.PityTimer)e.NewValue;
-          _prevTimer.AddRange(pt.Prev.Select(x => new ObservableValue(x)));
-          _currTimer = new ObservableValue(pt.Current);
-          _prevTimer.Add(_currTimer);
-
-          pt.Prev.CollectionChanged += PrevChanged;
-          pt.PropertyChanged += AverageChanged;
-          pt.PropertyChanged += CurrentChanged;
+        public SeriesCollection Prev { get; }
+        public Brush Fill
+        {
+            set
+            {
+                this._fillPrev = value.Clone();
+                this._fillPrev.Opacity = .9;
+                this._fillCurr = value.Clone();
+                this._fillCurr.Opacity = .5;
+                this._fillOrig = value;
+            }
         }
 
-        if(e.OldValue is View.PityTimer) {
-          ((View.PityTimer)e.OldValue).Prev.CollectionChanged -= PrevChanged;
-          ((View.PityTimer)e.OldValue).PropertyChanged -= AverageChanged;
-          ((View.PityTimer)e.OldValue).PropertyChanged -= CurrentChanged;
+        public int SoftThreshold { get; set; }
+        public int Threshold { get; set; }
+        public int? Average => this.DataContext is View.PityTimer ? ((View.PityTimer)this.DataContext).Average : null;
+        public string XTitle { get; set; }
+        public string YTitle { get; set; }
+        public double? MaxValue { get; set; }
+
+        public BarChartPrev()
+        {
+            this.InitializeComponent();
+            this.Chart.DataContext = this;
+
+            var mapper = Mappers.Xy<ObservableValue>()
+              .Fill((x, y) => x == this._currTimer ? this._fillCurr : this._fillPrev)
+              .Y((obs, y) => obs.Value)
+              .X((obs, x) => x)
+            ;
+            this._cs = new ColumnSeries(mapper)
+            {
+                Values = _prevTimer,
+            };
+
+            this.Prev = new SeriesCollection() {
+                this._cs,
+            };
+
+            DataContextChanged += (sender, e) =>
+            {
+                this._prevTimer.Clear();
+
+                if (e.NewValue is View.PityTimer)
+                {
+                    var pt = (View.PityTimer)e.NewValue;
+                    this._prevTimer.AddRange(pt.Prev.Select(x => new ObservableValue(x)));
+                    this._currTimer = new ObservableValue(pt.Current);
+                    this._prevTimer.Add(this._currTimer);
+
+                    pt.Prev.CollectionChanged += this.PrevChanged;
+                    pt.PropertyChanged += this.AverageChanged;
+                    pt.PropertyChanged += this.CurrentChanged;
+                }
+
+                if (e.OldValue is View.PityTimer)
+                {
+                    ((View.PityTimer)e.OldValue).Prev.CollectionChanged -= this.PrevChanged;
+                    ((View.PityTimer)e.OldValue).PropertyChanged -= this.AverageChanged;
+                    ((View.PityTimer)e.OldValue).PropertyChanged -= this.CurrentChanged;
+                }
+
+                this.OnPropertyChanged("Average");
+            };
         }
 
-        OnPropertyChanged("Average");
-      };
-    }
+        private void CurrentChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Current" && sender is View.PityTimer)
+            {
+                var pt = (View.PityTimer)sender;
+                this._currTimer.Value = pt.Current;
+            }
+        }
 
-    private void CurrentChanged(object sender, PropertyChangedEventArgs e) {
-      if(e.PropertyName == "Current" && sender is View.PityTimer) {
-        View.PityTimer pt = (View.PityTimer)sender;
-        _currTimer.Value = pt.Current;
-      }
-    }
+        private void AverageChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Average")
+            {
+                this.OnPropertyChanged(e.PropertyName);
+            }
+        }
 
-    private void AverageChanged(object sender, PropertyChangedEventArgs e) {
-      if(e.PropertyName == "Average") {
-        OnPropertyChanged(e.PropertyName);
-      }
-    }
+        private void PrevChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (this.DataContext is View.PityTimer)
+            {
+                var pt = (View.PityTimer)this.DataContext;
+                this._currTimer = new ObservableValue(pt.Current);
+                this._prevTimer.Add(this._currTimer);
+            }
+        }
 
-    private void PrevChanged(object sender, NotifyCollectionChangedEventArgs e) {
-      if(DataContext is View.PityTimer) {
-        View.PityTimer pt = (View.PityTimer)DataContext;
-        _currTimer = new ObservableValue(pt.Current);
-        _prevTimer.Add(_currTimer);
-      }
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    public event PropertyChangedEventHandler PropertyChanged;
-    void OnPropertyChanged(string prop) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-  }
+        private void OnPropertyChanged(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+    }
 }

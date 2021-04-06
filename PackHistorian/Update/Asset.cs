@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
-namespace PackTracker.Update {
-  [DataContract]
-  public class Asset {
-    [DataMember]
-    public string name;
+namespace PackTracker.Update
+{
+    [DataContract]
+    public class Asset
+    {
+        [DataMember]
+        public string name;
 
-    [DataMember]
-    public string browser_download_url;
-  }
+        [DataMember]
+        public string browser_download_url;
+    }
 }

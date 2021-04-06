@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PackTracker.Entity {
-  public class Pack {
-    int _id;
-    DateTime _time;
-    IEnumerable<Card> _cards;
+namespace PackTracker.Entity
+{
+    public class Pack
+    {
+        public int Id { get; }
+        public DateTime Time { get; }
+        public IEnumerable<Card> Cards { get; }
 
-    public int Id { get { return _id; } }
-    public DateTime Time { get { return _time; } }
-    public IEnumerable<Card> Cards { get { return _cards; } }
-
-    public Pack(int id, DateTime Time, IEnumerable<Card> Cards) {
-      _id = id;
-      _time = Time;
-      _cards = Cards;
+        public Pack(int id, DateTime Time, IEnumerable<Card> Cards)
+        {
+            this.Id = id;
+            this.Time = Time;
+            this.Cards = Cards;
+        }
     }
-  }
 }

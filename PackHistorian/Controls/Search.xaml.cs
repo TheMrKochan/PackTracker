@@ -1,48 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace PackTracker.Controls {
-  /// <summary>
-  /// Interaktionslogik für Search.xaml
-  /// </summary>
-  public partial class Search {
-    IndexRepository _index;
+namespace PackTracker.Controls
+{
+    /// <summary>
+    /// Interaktionslogik für Search.xaml
+    /// </summary>
+    public partial class Search
+    {
+        private IndexRepository _index;
 
-    public Search(PackTracker.History History) {
-      InitializeComponent();
+        public Search(PackTracker.History History)
+        {
+            this.InitializeComponent();
 
-      _index = new IndexRepository(History);
-      txt_Search.Focus();
+            this._index = new IndexRepository(History);
+            this.txt_Search.Focus();
+        }
+
+        private void txt_Search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                this.dg_Result.ItemsSource = this._index.Find(((TextBox)sender).Text);
+                this.txt_Search.SelectAll();
+            }
+        }
+
+        private void btn_Search_Click(object sender, RoutedEventArgs e)
+        {
+            this.dg_Result.ItemsSource = this._index.Find(this.txt_Search.Text);
+            this.txt_Search.Focus();
+            this.txt_Search.SelectAll();
+        }
+
+        private void MetroWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
     }
-
-    private void txt_Search_KeyDown(object sender, KeyEventArgs e) {
-      if(e.Key == Key.Return) {
-        dg_Result.ItemsSource = _index.Find(((TextBox)sender).Text);
-        txt_Search.SelectAll();
-      }
-    }
-
-    private void btn_Search_Click(object sender, RoutedEventArgs e) {
-      dg_Result.ItemsSource = _index.Find(txt_Search.Text);
-      txt_Search.Focus();
-      txt_Search.SelectAll();
-    }
-
-    private void MetroWindow_KeyDown(object sender, KeyEventArgs e) {
-      if(e.Key == Key.Escape) {
-        Close();
-      }
-    }
-  }
 }

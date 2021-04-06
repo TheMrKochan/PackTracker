@@ -1,110 +1,129 @@
 ﻿using HearthMirror.Objects;
-using Hearthstone_Deck_Tracker.Hearthstone;
-using HDTCard = Hearthstone_Deck_Tracker.Hearthstone.Card;
-using HearthWatcher;
-using HearthWatcher.EventArgs;
-using System.Collections.Generic;
-using System.Windows;
-using PackTracker.Event;
-using PackTracker.Entity;
-using System;
 using Hearthstone_Deck_Tracker.Enums.Hearthstone;
+using Hearthstone_Deck_Tracker.Hearthstone;
+using HearthWatcher.EventArgs;
+using PackTracker.Entity;
+using PackTracker.Event;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace PackTracker {
-  delegate void PackOpenedEventHandler(object sender, PackOpenedEventArgs e);
+namespace PackTracker
+{
+    internal delegate void PackOpenedEventHandler(object sender, PackOpenedEventArgs e);
 
-  class PackWatcher {
-    bool _running = false;
-    List<Process> _hearthstones = new List<Process>();
+    internal class PackWatcher
+    {
+        private List<Process> _hearthstones = new List<Process>();
 
-    public bool Running { get { return _running; } }
+        public bool Running { get; private set; } = false;
 
-    public event PackOpenedEventHandler PackOpened;
-    public event EventHandler PackScreenEntered;
-    public event EventHandler PackScreenLeft;
+        public event PackOpenedEventHandler PackOpened;
+        public event EventHandler PackScreenEntered;
+        public event EventHandler PackScreenLeft;
 
-    public PackWatcher() {
-      Hearthstone_Deck_Tracker.API.GameEvents.OnModeChanged.Add(HandleMode);
-    }
-
-    private void NewPack(object sender, PackEventArgs e) {
-      DateTime Time = DateTime.Now;
-      List<Entity.Card> Cards = new List<Entity.Card>();
-
-      foreach(var Card in e.Cards) {
-        HDTCard cardFromId = Database.GetCardFromId(Card.Id);
-        bool isPremium;
-        try
+        public PackWatcher()
         {
-            isPremium = ((dynamic)Card).Premium;
+            Hearthstone_Deck_Tracker.API.GameEvents.OnModeChanged.Add(this.HandleMode);
         }
-        catch
+
+        private void NewPack(object sender, PackEventArgs e)
         {
-            isPremium = ((dynamic)Card).PremiumType == 1;
-        }
-        Cards.Add(new Entity.Card(cardFromId, isPremium));
-      }
+            var Time = DateTime.Now;
+            var Cards = new List<Entity.Card>();
 
-      OnPackOpened(new Pack(e.PackId, Time, Cards));
-    }
+            foreach (var Card in e.Cards)
+            {
+                var cardFromId = Database.GetCardFromId(Card.Id);
+                bool isPremium;
+                try
+                {
+                    isPremium = ((dynamic)Card).Premium;
+                }
+                catch
+                {
+                    isPremium = ((dynamic)Card).PremiumType == 1;
+                }
+                Cards.Add(new Entity.Card(cardFromId, isPremium));
+            }
 
-    void OnPackOpened(Pack Pack) {
-      PackOpened?.Invoke(this, new PackOpenedEventArgs(Pack));
-    }
-
-    private void HandleMode(Mode Mode) {
-      if(!_running) return;
-
-      if(Mode == Mode.PACKOPENING) {
-        foreach(Process hs in Process.GetProcessesByName("Hearthstone")) {
-          if(hs is Process && !_hearthstones.Contains(hs)) {
-            hs.EnableRaisingEvents = true;
-            hs.Exited += Hs_Exited;
-            _hearthstones.Add(hs);
-          }
+            this.OnPackOpened(new Pack(e.PackId, Time, Cards));
         }
 
-        PackScreenEntered.Invoke(this, new EventArgs());
-      } else {
-        if(_hearthstones.Count > 0) {
-          _hearthstones.ForEach(x => { x.Exited -= Hs_Exited; x.EnableRaisingEvents = false; });
-          _hearthstones.Clear();
-
-          PackScreenLeft?.Invoke(this, new EventArgs());
+        private void OnPackOpened(Pack Pack)
+        {
+            PackOpened?.Invoke(this, new PackOpenedEventArgs(Pack));
         }
-      }
-    }
 
-    private void Hs_Exited(object sender, EventArgs e) {
-      if(sender is Process) {
-        Process hs = (Process)sender;
-        if(_hearthstones.Contains(hs)) {
-          hs.Exited -= Hs_Exited;
-          hs.EnableRaisingEvents = false;
-          _hearthstones.Remove(hs);
+        private void HandleMode(Mode Mode)
+        {
+            if (!this.Running)
+            {
+                return;
+            }
+
+            if (Mode == Mode.PACKOPENING)
+            {
+                foreach (var hs in Process.GetProcessesByName("Hearthstone"))
+                {
+                    if (hs is Process && !this._hearthstones.Contains(hs))
+                    {
+                        hs.EnableRaisingEvents = true;
+                        hs.Exited += this.Hs_Exited;
+                        this._hearthstones.Add(hs);
+                    }
+                }
+
+                PackScreenEntered.Invoke(this, new EventArgs());
+            }
+            else
+            {
+                if (this._hearthstones.Count > 0)
+                {
+                    this._hearthstones.ForEach(x => { x.Exited -= this.Hs_Exited; x.EnableRaisingEvents = false; });
+                    this._hearthstones.Clear();
+
+                    PackScreenLeft?.Invoke(this, new EventArgs());
+                }
+            }
         }
-      }
 
-      if(_hearthstones.Count == 0) {
-        PackScreenLeft?.Invoke(this, new EventArgs());
-      }
-    }
+        private void Hs_Exited(object sender, EventArgs e)
+        {
+            if (sender is Process hs)
+            {
+                if (this._hearthstones.Contains(hs))
+                {
+                    hs.Exited -= this.Hs_Exited;
+                    hs.EnableRaisingEvents = false;
+                    this._hearthstones.Remove(hs);
+                }
+            }
 
-    public void Start() {
-      if(!_running) {
-        Watchers.PackWatcher.NewPackEventHandler += NewPack;
-        _running = true;
-      }
-    }
+            if (this._hearthstones.Count == 0)
+            {
+                PackScreenLeft?.Invoke(this, new EventArgs());
+            }
+        }
 
-    public void Stop() {
-      if(_running) {
-        Watchers.PackWatcher.NewPackEventHandler -= NewPack;
-        _hearthstones.ForEach(x => { x.Exited -= Hs_Exited; x.EnableRaisingEvents = false; });
-        _hearthstones.Clear();
-        _running = false;
-      }
+        public void Start()
+        {
+            if (!this.Running)
+            {
+                Watchers.PackWatcher.NewPackEventHandler += this.NewPack;
+                this.Running = true;
+            }
+        }
+
+        public void Stop()
+        {
+            if (this.Running)
+            {
+                Watchers.PackWatcher.NewPackEventHandler -= this.NewPack;
+                this._hearthstones.ForEach(x => { x.Exited -= this.Hs_Exited; x.EnableRaisingEvents = false; });
+                this._hearthstones.Clear();
+                this.Running = false;
+            }
+        }
     }
-  }
 }

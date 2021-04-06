@@ -1,89 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using LiveCharts.Wpf;
-using LiveCharts;
-using LiveCharts.Defaults;
-using System.ComponentModel;
 
-namespace PackTracker.Controls.PityTimer {
-  /// <summary>
-  /// Interaktionslogik für BarChartSingle.xaml
-  /// </summary>
-  public partial class BarChartSingle : UserControl, INotifyPropertyChanged {
-    ObservableValue _single = new ObservableValue(0);
-    ColumnSeries _cs = new ColumnSeries();
-    SeriesCollection _sc;
+namespace PackTracker.Controls.PityTimer
+{
+    /// <summary>
+    /// Interaktionslogik für BarChartSingle.xaml
+    /// </summary>
+    public partial class BarChartSingle : UserControl, INotifyPropertyChanged
+    {
+        private ObservableValue _single = new ObservableValue(0);
+        private ColumnSeries _cs = new ColumnSeries();
 
-    public SeriesCollection Single => _sc;
-    public string Title { get; set; }
-    public int Threshold { get; set; }
-    public int SoftThreshold { get; set; }
-    public double? MaxValue { get; set; }
-    public AxisPosition Position { get; set; } = AxisPosition.LeftBottom;
-    public Brush Fill { set {
-        _cs.Fill = value.Clone();
-        _cs.Fill.Opacity = .9;
-    } }
+        public SeriesCollection Single { get; }
+        public string Title { get; set; }
+        public int Threshold { get; set; }
+        public int SoftThreshold { get; set; }
+        public double? MaxValue { get; set; }
+        public AxisPosition Position { get; set; } = AxisPosition.LeftBottom;
+        public Brush Fill
+        {
+            set
+            {
+                this._cs.Fill = value.Clone();
+                this._cs.Fill.Opacity = .9;
+            }
+        }
 
-    public int? Average => DataContext is View.PityTimer ? ((View.PityTimer)DataContext).Average : null;
+        public int? Average => this.DataContext is View.PityTimer ? ((View.PityTimer)this.DataContext).Average : null;
 
-    public BarChartSingle() {
-      InitializeComponent();
-      Chart.DataContext = this;
+        public BarChartSingle()
+        {
+            this.InitializeComponent();
+            this.Chart.DataContext = this;
 
-      ChartValues<ObservableValue> cv = new ChartValues<ObservableValue>();
-      cv.Add(_single);
+            var cv = new ChartValues<ObservableValue>
+            {
+                this._single
+            };
 
-      _cs.Values = cv;
+            this._cs.Values = cv;
 
-      _sc = new SeriesCollection() {
-        _cs,
+            this.Single = new SeriesCollection() {
+        this._cs,
       };
 
-      DataContextChanged += BarChartSingle_DataContextChanged;
+            DataContextChanged += this.BarChartSingle_DataContextChanged;
+        }
+
+        private void BarChartSingle_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is View.PityTimer)
+            {
+                var pt = (View.PityTimer)e.OldValue;
+                pt.PropertyChanged -= this.Pt_PropertyChanged;
+            }
+
+            if (e.NewValue is View.PityTimer)
+            {
+                var pt = (View.PityTimer)e.NewValue;
+                this._single.Value = pt.Current;
+                pt.PropertyChanged += this.Pt_PropertyChanged;
+            }
+            else
+            {
+                this._single.Value = 0;
+            }
+
+            this.OnPropertyChanged("Average");
+        }
+
+        private void Pt_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Current":
+                    this._single.Value = ((View.PityTimer)sender).Current;
+                    break;
+                case "Average":
+                    this.OnPropertyChanged(e.PropertyName);
+                    break;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
     }
-
-    private void BarChartSingle_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
-      if(e.OldValue is View.PityTimer) {
-        View.PityTimer pt = (View.PityTimer)e.OldValue;
-        pt.PropertyChanged -= Pt_PropertyChanged;
-      }
-
-      if(e.NewValue is View.PityTimer) {
-        View.PityTimer pt = (View.PityTimer)e.NewValue;
-        _single.Value = pt.Current;
-        pt.PropertyChanged += Pt_PropertyChanged;
-      } else {
-        _single.Value = 0;
-      }
-
-      OnPropertyChanged("Average");
-    }
-
-    private void Pt_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-      switch(e.PropertyName) {
-        case "Current":
-          _single.Value = ((View.PityTimer)sender).Current;
-          break;
-        case "Average":
-          OnPropertyChanged(e.PropertyName);
-          break;
-      }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    void OnPropertyChanged(string prop) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-  }
 }

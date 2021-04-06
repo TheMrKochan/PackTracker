@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PackTracker.Entity;
+﻿using PackTracker.Entity;
 
-namespace PackTracker.Event {
-  class PackOpenedEventArgs {
-    Pack _pack;
+namespace PackTracker.Event
+{
+    internal class PackOpenedEventArgs
+    {
+        public Pack Pack { get; }
 
-    public Pack Pack { get { return _pack; } }
-
-    public PackOpenedEventArgs(Pack Pack) {
-      _pack = Pack;
+        public PackOpenedEventArgs(Pack Pack)
+        {
+            this.Pack = Pack;
+        }
     }
-  }
 }

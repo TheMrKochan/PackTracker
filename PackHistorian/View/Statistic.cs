@@ -1,180 +1,195 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HearthDb.Enums;
 using PackTracker.Entity;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using HearthDb.Enums;
+using System.Linq;
 
-namespace PackTracker.View {
-  class Statistic : INotifyPropertyChanged{
-    int _packId;
-    List<Pack> _packs;
+namespace PackTracker.View
+{
+    internal class Statistic : INotifyPropertyChanged
+    {
+        private int _packId;
+        private List<Pack> _packs;
+        private int _commonPacks = 0;
+        private int _rarePacks = 0;
+        private int _epicPacks = 0;
+        private int _legendaryPacks = 0;
+        private int _totalAmount = 0;
+        private int _epicCurrStreak = 0;
+        private int _legendaryCurrStreak = 0;
 
-    int
-      _commonAmount = 0,
-      _commonPacks = 0,
+        public int CommonAmount { get; private set; } = 0;
+        public double CommonCards => this._totalAmount == 0 ? 0 : (double)this.CommonAmount / this._totalAmount;
+        public double CommonPacks => this._packs.Count == 0 ? 0 : (double)this._commonPacks / this._packs.Count;
 
-      _rareAmount = 0,
-      _rarePacks = 0,
+        public int RareAmount { get; private set; } = 0;
+        public double RareCards => this._totalAmount == 0 ? 0 : (double)this.RareAmount / this._totalAmount;
+        public double RarePacks => this._packs.Count == 0 ? 0 : (double)this._rarePacks / this._packs.Count;
 
-      _epicAmount = 0,
-      _epicPacks = 0,
+        public int EpicAmount { get; private set; } = 0;
+        public double EpicCards => this._totalAmount == 0 ? 0 : (double)this.EpicAmount / this._totalAmount;
+        public double EpicPacks => this._packs.Count == 0 ? 0 : (double)this._epicPacks / this._packs.Count;
 
-      _legendaryAmount = 0,
-      _legendaryPacks = 0,
+        public int LegendaryAmount { get; private set; } = 0;
+        public double LegendaryCards => this._totalAmount == 0 ? 0 : (double)this.LegendaryAmount / this._totalAmount;
+        public double LegendaryPacks => this._packs.Count == 0 ? 0 : (double)this._legendaryPacks / this._packs.Count;
 
-      _totalAmount = 0,
+        public int TotalPacks => this._packs.Count;
 
-      _epicCurrStreak = 0,
-      _epicLongStreak = 0,
+        public int EpicStreak { get; private set; } = 0;
+        public int LegendaryStreak { get; private set; } = 0;
 
-      _legendaryCurrStreak = 0,
-      _legendaryLongStreak = 0;
+        public Statistic(int packId, History History)
+        {
+            this._packId = packId;
+            this._packs = new List<Pack>(History.Where(x => x.Id == packId));
 
-    public int CommonAmount { get => _commonAmount; }
-    public double CommonCards { get => _totalAmount == 0 ? 0 : (double)_commonAmount / _totalAmount; }
-    public double CommonPacks { get => _packs.Count == 0 ? 0 : (double)_commonPacks / _packs.Count; }
-
-    public int RareAmount { get => _rareAmount; }
-    public double RareCards { get => _totalAmount == 0 ? 0 : (double)_rareAmount / _totalAmount; }
-    public double RarePacks { get => _packs.Count == 0 ? 0 : (double)_rarePacks / _packs.Count; }
-
-    public int EpicAmount { get => _epicAmount; }
-    public double EpicCards { get => _totalAmount == 0 ? 0 : (double)_epicAmount / _totalAmount; }
-    public double EpicPacks { get => _packs.Count == 0 ? 0 : (double)_epicPacks / _packs.Count; }
-
-    public int LegendaryAmount { get => _legendaryAmount; }
-    public double LegendaryCards { get => _totalAmount == 0 ? 0 : (double)_legendaryAmount / _totalAmount; }
-    public double LegendaryPacks { get => _packs.Count == 0 ? 0 : (double)_legendaryPacks / _packs.Count; }
-
-    public int TotalPacks { get => _packs.Count; }
-
-    public int EpicStreak { get => _epicLongStreak; }
-    public int LegendaryStreak { get => _legendaryLongStreak; }
-
-    public Statistic(int packId, History History) {
-      _packId = packId;
-      _packs = new List<Pack>(History.Where(x => x.Id == packId));
-
-      foreach(Pack Pack in _packs) {
-        CountRarity(Pack);
-        CountStreak(Pack);
-      }
-
-      History.CollectionChanged += (sender, e) => {
-        if(e.Action == NotifyCollectionChangedAction.Add) {
-          foreach(Pack Pack in e.NewItems) {
-            if(Pack.Id == _packId) {
-              _packs.Add(Pack);
-              CountRarity(Pack);
-              CountStreak(Pack);
-
-              if(Pack.Cards.Any(x => x.Rarity == Rarity.COMMON)) {
-                OnPropertyChanged("CommonAmount");
-              }
-
-              if(Pack.Cards.Any(x => x.Rarity == Rarity.RARE)) {
-                OnPropertyChanged("RareAmount");
-              }
-
-              if(Pack.Cards.Any(x => x.Rarity == Rarity.EPIC)) {
-                OnPropertyChanged("EpicAmount");
-              }
-
-              if(Pack.Cards.Any(x => x.Rarity == Rarity.LEGENDARY)) {
-                OnPropertyChanged("LegendaryAmount");
-              }
-
-              OnPropertyChanged("CommonCards");
-              OnPropertyChanged("CommonPacks");
-              OnPropertyChanged("RareCards");
-              OnPropertyChanged("RarePacks");
-              OnPropertyChanged("EpicCards");
-              OnPropertyChanged("EpicPacks");
-              OnPropertyChanged("LegendaryCards");
-              OnPropertyChanged("LegendaryPacks");
-              OnPropertyChanged("TotalPacks");
+            foreach (var Pack in this._packs)
+            {
+                this.CountRarity(Pack);
+                this.CountStreak(Pack);
             }
-          }
+
+            History.CollectionChanged += (sender, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                {
+                    foreach (Pack Pack in e.NewItems)
+                    {
+                        if (Pack.Id == this._packId)
+                        {
+                            this._packs.Add(Pack);
+                            this.CountRarity(Pack);
+                            this.CountStreak(Pack);
+
+                            if (Pack.Cards.Any(x => x.Rarity == Rarity.COMMON))
+                            {
+                                this.OnPropertyChanged("CommonAmount");
+                            }
+
+                            if (Pack.Cards.Any(x => x.Rarity == Rarity.RARE))
+                            {
+                                this.OnPropertyChanged("RareAmount");
+                            }
+
+                            if (Pack.Cards.Any(x => x.Rarity == Rarity.EPIC))
+                            {
+                                this.OnPropertyChanged("EpicAmount");
+                            }
+
+                            if (Pack.Cards.Any(x => x.Rarity == Rarity.LEGENDARY))
+                            {
+                                this.OnPropertyChanged("LegendaryAmount");
+                            }
+
+                            this.OnPropertyChanged("CommonCards");
+                            this.OnPropertyChanged("CommonPacks");
+                            this.OnPropertyChanged("RareCards");
+                            this.OnPropertyChanged("RarePacks");
+                            this.OnPropertyChanged("EpicCards");
+                            this.OnPropertyChanged("EpicPacks");
+                            this.OnPropertyChanged("LegendaryCards");
+                            this.OnPropertyChanged("LegendaryPacks");
+                            this.OnPropertyChanged("TotalPacks");
+                        }
+                    }
+                }
+            };
         }
-      };
+
+        private void CountRarity(Pack Pack)
+        {
+            bool
+              hasCommon = false,
+              hasRare = false,
+              hasEpic = false,
+              hasLegendary = false;
+
+            foreach (var Card in Pack.Cards)
+            {
+                switch (Card.Rarity)
+                {
+                    case Rarity.COMMON:
+                        this.CommonAmount++;
+                        hasCommon = true;
+                        break;
+                    case Rarity.RARE:
+                        this.RareAmount++;
+                        hasRare = true;
+                        break;
+                    case Rarity.EPIC:
+                        this.EpicAmount++;
+                        hasEpic = true;
+                        break;
+                    case Rarity.LEGENDARY:
+                        hasLegendary = true;
+                        this.LegendaryAmount++;
+                        break;
+                }
+
+                this._totalAmount++;
+            }
+
+            if (hasCommon)
+            {
+                this._commonPacks++;
+            }
+
+            if (hasRare)
+            {
+                this._rarePacks++;
+            }
+
+            if (hasEpic)
+            {
+                this._epicPacks++;
+            }
+
+            if (hasLegendary)
+            {
+                this._legendaryPacks++;
+            }
+        }
+
+        private void CountStreak(Pack Pack)
+        {
+            if (Pack.Cards.Any(x => x.Rarity == Rarity.EPIC))
+            {
+                this._epicCurrStreak = 0;
+            }
+            else
+            {
+                this._epicCurrStreak++;
+
+                if (this._epicCurrStreak > this.EpicStreak)
+                {
+                    this.EpicStreak = this._epicCurrStreak;
+                    this.OnPropertyChanged("EpicStreak");
+                }
+            }
+
+            if (Pack.Cards.Any(x => x.Rarity == Rarity.LEGENDARY))
+            {
+                this._legendaryCurrStreak = 0;
+            }
+            else
+            {
+                this._legendaryCurrStreak++;
+
+                if (this._legendaryCurrStreak > this.LegendaryStreak)
+                {
+                    this.LegendaryStreak = this._legendaryCurrStreak;
+                    this.OnPropertyChanged("LegendaryStreak");
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
     }
-
-    void CountRarity(Pack Pack) {
-      bool
-        hasCommon = false,
-        hasRare = false,
-        hasEpic = false,
-        hasLegendary = false;
-
-      foreach(Card Card in Pack.Cards) {
-        switch(Card.Rarity) {
-          case Rarity.COMMON:
-            _commonAmount++;
-            hasCommon = true;
-            break;
-          case Rarity.RARE:
-            _rareAmount++;
-            hasRare = true;
-            break;
-          case Rarity.EPIC:
-            _epicAmount++;
-            hasEpic = true;
-            break;
-          case Rarity.LEGENDARY:
-            hasLegendary = true;
-            _legendaryAmount++;
-            break;
-        }
-
-        _totalAmount++;
-      }
-
-      if(hasCommon) {
-        _commonPacks++;
-      }
-
-      if(hasRare) {
-        _rarePacks++;
-      }
-
-      if(hasEpic) {
-        _epicPacks++;
-      }
-
-      if(hasLegendary) {
-        _legendaryPacks++;
-      }
-    }
-
-    void CountStreak(Pack Pack) {
-      if(Pack.Cards.Any(x => x.Rarity == Rarity.EPIC)) {
-        _epicCurrStreak = 0;
-      } else {
-        _epicCurrStreak++;
-
-        if(_epicCurrStreak > _epicLongStreak) {
-          _epicLongStreak = _epicCurrStreak;
-          OnPropertyChanged("EpicStreak");
-        }
-      }
-
-      if(Pack.Cards.Any(x => x.Rarity == Rarity.LEGENDARY)) {
-        _legendaryCurrStreak = 0;
-      } else {
-        _legendaryCurrStreak++;
-
-        if(_legendaryCurrStreak > _legendaryLongStreak) {
-          _legendaryLongStreak = _legendaryCurrStreak;
-          OnPropertyChanged("LegendaryStreak");
-        }
-      }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    void OnPropertyChanged(string prop) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-  }
 }

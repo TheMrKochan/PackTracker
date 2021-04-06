@@ -1,40 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using HearthDb.Enums;
+﻿using HearthDb.Enums;
 using MahApps.Metro.Controls;
 using PackTracker.View.Cache;
 
-namespace PackTracker.Controls.PityTimer {
-  /// <summary>
-  /// Interaktionslogik für PityTimer.xaml
-  /// </summary>
-  public partial class PityTimer : MetroWindow {
-    PityTimerRepository _pityTimers;
+namespace PackTracker.Controls.PityTimer
+{
+    /// <summary>
+    /// Interaktionslogik für PityTimer.xaml
+    /// </summary>
+    public partial class PityTimer : MetroWindow
+    {
+        private PityTimerRepository _pityTimers;
 
-    public PityTimer(PackTracker.History History, PityTimerRepository PityTimers) {
-      InitializeComponent();
+        public PityTimer(PackTracker.History History, PityTimerRepository PityTimers)
+        {
+            this.InitializeComponent();
 
-      _pityTimers = PityTimers;
+            this._pityTimers = PityTimers;
 
-      dd_Packs.SelectionChanged += (sender, e) => {
-        if(e.AddedItems.Count == 1) {
-          Ep_Prev.DataContext = Ep_Label.DataContext = _pityTimers.GetPityTimer((int)e.AddedItems[0], Rarity.EPIC, false, true);
-          Leg_Prev.DataContext = Leg_Label.DataContext = _pityTimers.GetPityTimer((int)e.AddedItems[0], Rarity.LEGENDARY, false, true);
+            this.dd_Packs.SelectionChanged += (sender, e) =>
+            {
+                if (e.AddedItems.Count == 1)
+                {
+                    this.Ep_Prev.DataContext = this.Ep_Label.DataContext = this._pityTimers.GetPityTimer((int)e.AddedItems[0], Rarity.EPIC, false, true);
+                    this.Leg_Prev.DataContext = this.Leg_Label.DataContext = this._pityTimers.GetPityTimer((int)e.AddedItems[0], Rarity.LEGENDARY, false, true);
+                }
+            };
+
+            Loaded += (sender, e) => this.dd_Packs.DataContext = History;
         }
-      };
-
-      Loaded += (sender, e) => dd_Packs.DataContext = History;
     }
-  }
 }

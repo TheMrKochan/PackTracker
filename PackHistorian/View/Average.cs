@@ -1,103 +1,112 @@
-﻿using System;
+﻿using HearthDb.Enums;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HearthDb.Enums;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 
-namespace PackTracker.View {
-  public class Average : INotifyPropertyChanged {
-    int _packId;
+namespace PackTracker.View
+{
+    public class Average : INotifyPropertyChanged
+    {
+        private List<int> _countsEpic = new List<int>();
+        private List<int> _countsLeg = new List<int>();
+        private bool _skippingEpic = true;
+        private bool _skippingLeg = true;
 
-    List<int>
-      _countsEpic = new List<int>(),
-      _countsLeg = new List<int>();
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    bool
-      _skippingEpic = true,
-      _skippingLeg = true;
+        public int Id { get; }
 
-    int
-      _currentEpic = 0,
-      _currentLeg = 0;
+        public int? AverageEpic => this._countsEpic.Count > 1 ? (int?)Math.Round(this._countsEpic.Average(), 0) : null;
+        public int? AverageLegendary => this._countsLeg.Count > 1 ? (int?)Math.Round(this._countsLeg.Average(), 0) : null;
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public int CurrentEpic { get; private set; } = 0;
+        public int CurrentLegendary { get; private set; } = 0;
 
-    public int Id { get { return _packId; } }
+        public Average(int PackId, History History)
+        {
+            this.Id = PackId;
+            this.AddCounts(History);
 
-    public int? AverageEpic { get { return _countsEpic.Count > 1 ? (int?)Math.Round(_countsEpic.Average(), 0) : null; } }
-    public int? AverageLegendary { get { return _countsLeg.Count > 1 ? (int?)Math.Round(_countsLeg.Average(), 0) : null; } }
-
-    public int CurrentEpic { get { return _currentEpic; } }
-    public int CurrentLegendary { get { return _currentLeg; } }
-
-    public Average(int PackId, History History) {
-      _packId = PackId;
-      AddCounts(History);
-
-      History.CollectionChanged += History_CollectionChanged;
-    }
-
-    private void History_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-      if(e.Action == NotifyCollectionChangedAction.Add) {
-          AddCounts(e.NewItems.Cast<Entity.Pack>());
-      }
-    }
-
-    private void AddCounts(IEnumerable<Entity.Pack> Packs) {
-      bool notifyAverageEpic = false;
-      bool notifyAverageLegendary = false;
-      bool notifyCurrent = false;
-
-      foreach(Entity.Pack Pack in Packs) {
-        if(Pack.Id == _packId) {
-          _currentEpic++;
-          _currentLeg++;
-
-          notifyCurrent = true;
-
-          if(Pack.Cards.Any(x => x.Rarity == Rarity.EPIC)) {
-            if(_skippingEpic) {
-              _skippingEpic = false;
-            } else {
-              _countsEpic.Add(_currentEpic);
-              notifyAverageEpic = true;
-            }
-
-            _currentEpic = 0;
-          }
-
-          if(Pack.Cards.Any(x => x.Rarity == Rarity.LEGENDARY)) {
-            if(_skippingLeg) {
-              _skippingLeg = false;
-            } else {
-              _countsLeg.Add(_currentLeg);
-              notifyAverageLegendary = true;
-            }
-
-            _currentLeg = 0;
-          }
+            History.CollectionChanged += this.History_CollectionChanged;
         }
-      }
 
-      if(notifyAverageEpic) {
-        OnPropertyChanged("AverageEpic");
-      }
+        private void History_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                this.AddCounts(e.NewItems.Cast<Entity.Pack>());
+            }
+        }
 
-      if(notifyAverageLegendary) {
-        OnPropertyChanged("AverageLegendary");
-      }
+        private void AddCounts(IEnumerable<Entity.Pack> Packs)
+        {
+            var notifyAverageEpic = false;
+            var notifyAverageLegendary = false;
+            var notifyCurrent = false;
 
-      if(notifyCurrent) {
-        OnPropertyChanged("CurrentEpic");
-        OnPropertyChanged("CurrentLegendary");
-      }
+            foreach (var Pack in Packs)
+            {
+                if (Pack.Id == this.Id)
+                {
+                    this.CurrentEpic++;
+                    this.CurrentLegendary++;
+
+                    notifyCurrent = true;
+
+                    if (Pack.Cards.Any(x => x.Rarity == Rarity.EPIC))
+                    {
+                        if (this._skippingEpic)
+                        {
+                            this._skippingEpic = false;
+                        }
+                        else
+                        {
+                            this._countsEpic.Add(this.CurrentEpic);
+                            notifyAverageEpic = true;
+                        }
+
+                        this.CurrentEpic = 0;
+                    }
+
+                    if (Pack.Cards.Any(x => x.Rarity == Rarity.LEGENDARY))
+                    {
+                        if (this._skippingLeg)
+                        {
+                            this._skippingLeg = false;
+                        }
+                        else
+                        {
+                            this._countsLeg.Add(this.CurrentLegendary);
+                            notifyAverageLegendary = true;
+                        }
+
+                        this.CurrentLegendary = 0;
+                    }
+                }
+            }
+
+            if (notifyAverageEpic)
+            {
+                this.OnPropertyChanged("AverageEpic");
+            }
+
+            if (notifyAverageLegendary)
+            {
+                this.OnPropertyChanged("AverageLegendary");
+            }
+
+            if (notifyCurrent)
+            {
+                this.OnPropertyChanged("CurrentEpic");
+                this.OnPropertyChanged("CurrentLegendary");
+            }
+        }
+
+        private void OnPropertyChanged(string property)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
     }
-
-    private void OnPropertyChanged(string property) {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-    }
-  }
 }

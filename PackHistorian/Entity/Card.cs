@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HearthDb.Enums;
+﻿using HearthDb.Enums;
 using HDTCard = Hearthstone_Deck_Tracker.Hearthstone.Card;
 
-namespace PackTracker.Entity {
-  public class Card {
-    HDTCard _card;
-    bool _premium;
+namespace PackTracker.Entity
+{
+    public class Card
+    {
+        public HDTCard HDTCard { get; }
+        public bool Premium { get; }
+        public Rarity Rarity => this.HDTCard.Rarity;
 
-    public HDTCard HDTCard { get { return _card; } }
-    public bool Premium { get { return _premium; } }
-    public Rarity Rarity { get { return _card.Rarity; } }
-
-    public Card(HDTCard Card, bool premium) {
-      _card = Card;
-      _premium = premium;
+        public Card(HDTCard Card, bool premium)
+        {
+            this.HDTCard = Card;
+            this.Premium = premium;
+        }
     }
-  }
 }
