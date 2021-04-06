@@ -78,7 +78,7 @@ namespace PackTracker.Update
 
         public Release GetLatestRelease()
         {
-            var request = WebRequest.CreateHttp(@"https://api.github.com/repos/mgk82/PackTracker/releases/latest");
+            var request = WebRequest.CreateHttp(@"https://api.github.com/repos/sgkoishi/PackTracker/releases/latest");
             request.Proxy = null;
             request.UserAgent = _userAgend;
 
@@ -96,7 +96,7 @@ namespace PackTracker.Update
         {
             var Releases = new List<Release>();
 
-            var request = WebRequest.CreateHttp(@"https://api.github.com/repos/mgk82/PackTracker/releases");
+            var request = WebRequest.CreateHttp(@"https://api.github.com/repos/sgkoishi/PackTracker/releases");
             request.Proxy = null;
             request.UserAgent = _userAgend;
 
