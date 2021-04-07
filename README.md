@@ -1,10 +1,10 @@
-# PackTracker [![Github All Downloads](https://img.shields.io/github/downloads/mgk82/packtracker/total.svg)](https://github.com/mgk82/packtracker/releases)
+# PackTracker [![Github All Downloads](https://img.shields.io/github/downloads/sgkoishi/packtracker/total.svg)](https://github.com/sgkoishi/packtracker/releases)
 Plugin for [HearthstoneDeckTracker](https://hsdecktracker.net/)
 
 Pack Tacker is a small but handy plugin for Hearthstone Deck Tacker that allows you to keep an eye on every pack you open. 
 This allows you to see how many cards of different rarities have dropped over time and also enables you to estimate when your next Epic or Legendary is coming!
 
-## Features [![GitHub Latest](https://img.shields.io/github/release/mgk82/packtracker.svg)](https://github.com/MGK82/PackTracker/releases/latest) [![Github Latest Downloads](https://img.shields.io/github/downloads/mgk82/packtracker/latest/total.svg)](https://github.com/MGK82/PackTracker/releases/latest)
+## Features [![GitHub Latest](https://img.shields.io/github/release/sgkoishi/packtracker.svg)](https://github.com/sgkoishi/PackTracker/releases/latest) [![Github Latest Downloads](https://img.shields.io/github/downloads/sgkoishi/packtracker/latest/total.svg)](https://github.com/sgkoishi/PackTracker/releases/latest)
 - Tracks your pack openings
   - **Fully Automatic. No hassle with spreadsheets or any other manual input**
 - Data can be represented in
@@ -16,25 +16,27 @@ This allows you to see how many cards of different rarities have dropped over ti
   - Represented as bar charts
   - Overlay while opening packs (See your pity timers counting live)
 - Can search through card names and texts in both, english and the chosen language of your HDT at once
-  - *HDT must support the translation*
 - **All stored locally. No hassle with overloaded webpages on release days**
 
-[Download](https://github.com/MGK82/PackTracker/releases/latest)  and unzip  
+[Download](https://github.com/sgkoishi/PackTracker/releases/latest)  and unzip  
 [How to add plugins to HDT](https://github.com/HearthSim/Hearthstone-Deck-Tracker/wiki/Available-Plugins)
 
 ## Screenshots
 
-Pity Timers  
-![](https://github.com/MGK82/PackTracker/blob/master/doc/Screenshots/PityTimer.png?raw=true)
+#### Pity Timers  
+![](doc/Screenshots/PityTimer.png)
 
-Statistic  
-![](https://github.com/MGK82/PackTracker/blob/master/doc/Screenshots/Statistic.png?raw=true)
+#### Statistic  
+![](doc/Screenshots/Statistic.png)
 
-History  
-![](https://github.com/MGK82/PackTracker/blob/master/doc/Screenshots/History.png?raw=true)  
+#### History  
+![](doc/Screenshots/History.png)  
 
-Log  
-![](https://github.com/MGK82/PackTracker/blob/master/doc/Screenshots/Log.png?raw=true)
+#### Log  
+![](doc/Screenshots/Log.png)
 
-Search  
-![](https://github.com/MGK82/PackTracker/blob/master/doc/Screenshots/Search.png?raw=true)
+#### Search  
+![](doc/Screenshots/Search.png)
+
+#### Manual Add  
+![](doc/Screenshots/ManualAdd.png)
