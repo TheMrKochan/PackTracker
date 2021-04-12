@@ -15,6 +15,7 @@ This allows you to see how many cards of different rarities have dropped over ti
 - Counts boosterpack-series-based **Pity Timer** for Epic and Legendary cards
   - Represented as bar charts
   - Overlay while opening packs (See your pity timers counting live)
+- Show the overall amount of packs you've ever got
 - Can search through card names and texts in both, english and the chosen language of your HDT at once
 - **All stored locally. No hassle with overloaded webpages on release days**
 
