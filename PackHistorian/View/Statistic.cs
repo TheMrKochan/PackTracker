@@ -35,10 +35,16 @@ namespace PackTracker.View
         public double LegendaryCards => this._totalAmount == 0 ? 0 : (double)this.LegendaryAmount / this._totalAmount;
         public double LegendaryPacks => this._packs.Count == 0 ? 0 : (double)this._legendaryPacks / this._packs.Count;
 
-        public int TotalPacks => this._packs.Count;
+        public string TotalPacks => _everGranted.ContainsKey(this._packId)
+            ? _everGranted[this._packId] == this._packs.Count
+                ? $"{this._packs.Count} Packs (Tracked)"
+                : $"{this._packs.Count} Tracked / { _everGranted[this._packId]} Total"
+            : $"{this._packs.Count} Packs";
 
         public int EpicStreak { get; private set; } = 0;
         public int LegendaryStreak { get; private set; } = 0;
+
+        private static Dictionary<int, int> _everGranted = new Dictionary<int, int>();
 
         public Statistic(int packId, History History)
         {
@@ -50,6 +56,7 @@ namespace PackTracker.View
                 this.CountRarity(Pack);
                 this.CountStreak(Pack);
             }
+            _everGranted = PackWatcher.UpdateGranted();
 
             History.CollectionChanged += (sender, e) =>
             {
@@ -95,6 +102,7 @@ namespace PackTracker.View
                         }
                     }
                 }
+                _everGranted = PackWatcher.UpdateGranted();
             };
         }
 

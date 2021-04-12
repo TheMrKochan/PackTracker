@@ -89,7 +89,7 @@
             <TextBlock Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3" Text="{Binding LegendaryPacks, Converter={StaticResource PercentConverter}, UpdateSourceTrigger=PropertyChanged}" FontSize="{DynamicResource FontSize}" />
 
             <Label Grid.Row="5" Grid.Column="0" VerticalContentAlignment="Center" Content="Total" FontSize="{DynamicResource FontSize}"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3" Text="{Binding TotalPacks, Converter={StaticResource DecimalConverter}, StringFormat=\{0\} Packs, UpdateSourceTrigger=PropertyChanged}" FontSize="{DynamicResource FontSize}" />
+            <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3" Text="{Binding TotalPacks, UpdateSourceTrigger=PropertyChanged}" FontSize="{DynamicResource FontSize}" />
         </Grid>
     </DockPanel>
 </controls:MetroWindow>

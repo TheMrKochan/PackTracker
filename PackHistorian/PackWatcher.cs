@@ -125,5 +125,50 @@ namespace PackTracker
                 this.Running = false;
             }
         }
+
+        public static object GetNetCacheService(string serviceName)
+        {
+            var monoObject = typeof(HearthMirror.Reflection).Invoke("GetService", "NetCache")
+                .HearthMirrorGet("m_netCache")?.HearthMirrorGet("valueSlots");
+
+            if (!(monoObject is object[] ie))
+            {
+                return null;
+            }
+
+            foreach (var item in ie)
+            {
+                if (item?.ValueOf("Class")?.ValueOf("Name")?.ToString() == serviceName)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        public static Dictionary<int, int> UpdateGranted()
+        {
+            var newdict = new Dictionary<int, int>();
+            var boosterServices = GetNetCacheService("NetCacheBoosters");
+            var stacks = boosterServices?.HearthMirrorGet("<BoosterStacks>k__BackingField");
+            var items = stacks?.HearthMirrorGet("_items");
+
+            if (!(items is object[] array))
+            {
+                return newdict;
+            }
+
+            foreach (var item in array)
+            {
+                if (item != null)
+                {
+                    var id = (int)item.HearthMirrorGet("<Id>k__BackingField");
+                    var granted = (int)item.HearthMirrorGet("<EverGrantedCount>k__BackingField");
+                    newdict.Add(id, granted);
+                }
+            }
+
+            return newdict;
+        }
     }
 }
