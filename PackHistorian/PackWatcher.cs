@@ -148,27 +148,35 @@ namespace PackTracker
 
         public static Dictionary<int, int> UpdateGranted()
         {
-            var newdict = new Dictionary<int, int>();
-            var boosterServices = GetNetCacheService("NetCacheBoosters");
-            var stacks = boosterServices?.HearthMirrorGet("<BoosterStacks>k__BackingField");
-            var items = stacks?.HearthMirrorGet("_items");
-
-            if (!(items is object[] array))
+            try
             {
+                var boosterServices = GetNetCacheService("NetCacheBoosters");
+                var stacks = boosterServices?.HearthMirrorGet("<BoosterStacks>k__BackingField");
+                var items = stacks?.HearthMirrorGet("_items");
+
+                if (!(items is object[] array))
+                {
+                    return null;
+                }
+
+                var newdict = new Dictionary<int, int>();
+                foreach (var item in array)
+                {
+                    if (item != null)
+                    {
+                        var id = (int)item.HearthMirrorGet("<Id>k__BackingField");
+                        var granted = (int)item.HearthMirrorGet("<EverGrantedCount>k__BackingField");
+                        newdict.Add(id, granted);
+                    }
+                }
+
                 return newdict;
             }
-
-            foreach (var item in array)
+            catch
             {
-                if (item != null)
-                {
-                    var id = (int)item.HearthMirrorGet("<Id>k__BackingField");
-                    var granted = (int)item.HearthMirrorGet("<EverGrantedCount>k__BackingField");
-                    newdict.Add(id, granted);
-                }
+                // Game not launched, failed, etc.
+                return null;
             }
-
-            return newdict;
         }
     }
 }

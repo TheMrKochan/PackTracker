@@ -56,7 +56,15 @@ namespace PackTracker.View
                 this.CountRarity(Pack);
                 this.CountStreak(Pack);
             }
-            _everGranted = PackWatcher.UpdateGranted();
+
+            var grant = PackWatcher.UpdateGranted();
+            if (grant != null)
+            {
+                foreach (var kvp in grant)
+                {
+                    _everGranted[kvp.Key] = kvp.Value;
+                }
+            }
 
             History.CollectionChanged += (sender, e) =>
             {
@@ -102,7 +110,15 @@ namespace PackTracker.View
                         }
                     }
                 }
-                _everGranted = PackWatcher.UpdateGranted();
+
+                var dictionary = PackWatcher.UpdateGranted();
+                if (dictionary != null)
+                {
+                    foreach (var kvp in dictionary)
+                    {
+                        _everGranted[kvp.Key] = kvp.Value;
+                    }
+                }
             };
         }
 
