@@ -45,6 +45,11 @@ namespace PackTracker
             if (!this._index.ContainsValue(Index.Card.HDTCard.Id))
             {
                 var DbCard = HearthDb.Cards.GetFromDbfId(Index.Card.HDTCard.DbfIf);
+                if (DbCard == null)
+                {
+                    return;
+                }
+
                 var name = DbCard.Name?.ToLower();
                 var text = DbCard.Text?.ToLower();
 
