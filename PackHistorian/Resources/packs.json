@@ -501,7 +501,7 @@
         "plPL": "Pakiet kart z Roku Smoka",
         "ptPT": "Pacote de cards do Ano do Dragão",
         "jaJP": "「ドラゴン年」カードパック",
-        "thTH": "ซองการ์ดปีแห่งมังกร",
+        "thTH": "ซองการ์ดปีแห่งมังกร"
     },
     "688": {
         "enUS": "Year of the Phoenix Card Pack",
@@ -519,7 +519,7 @@
         "plPL": "Pakiet kart z Roku Feniksa",
         "ptPT": "Pacote de cards do Ano do Fênix",
         "jaJP": "フェニックス年カードパック",
-        "thTH": "ซองการ์ดปีแห่งฟีนิกซ์",
+        "thTH": "ซองการ์ดปีแห่งฟีนิกซ์"
     },
     "470": {
         "enUS": "Hunter Card Pack",
@@ -537,7 +537,7 @@
         "plPL": "Pakiet kart łowcy",
         "ptPT": "Pacote de cards: Caçador",
         "jaJP": "ハンターカードパック",
-        "thTH": "ซองการ์ดฮันเตอร์",
+        "thTH": "ซองการ์ดฮันเตอร์"
     },
     "545": {
         "enUS": "Mage Card Pack",
@@ -555,7 +555,7 @@
         "plPL": "Pakiet kart maga",
         "ptPT": "Pacote de cards: Mago",
         "jaJP": "メイジカードパック",
-        "thTH": "ซองการ์ดเมจ",
+        "thTH": "ซองการ์ดเมจ"
     },
     "632": {
         "enUS": "Paladin Card Pack",
@@ -573,7 +573,7 @@
         "plPL": "Pakiet kart paladyna",
         "ptPT": "Pacote de cards de Paladino",
         "jaJP": "パラディンカードパック",
-        "thTH": "ซองการ์ดพาลาดิน",
+        "thTH": "ซองการ์ดพาลาดิน"
     },
     "633": {
         "enUS": "Warrior Card Pack",
@@ -591,7 +591,7 @@
         "plPL": "Pakiet kart wojownika",
         "ptPT": "Pacote de cards: Guerreiro",
         "jaJP": "ウォリアーカードパック",
-        "thTH": "ซองการ์ดวอริเออร์",
+        "thTH": "ซองการ์ดวอริเออร์"
     },
     "634": {
         "enUS": "Priest Card Pack",
@@ -609,7 +609,7 @@
         "plPL": "Pakiet kart kapłana",
         "ptPT": "Pacote de cards de Sacerdote",
         "jaJP": "プリーストカードパック",
-        "thTH": "ซองการ์ดพรีสต์",
+        "thTH": "ซองการ์ดพรีสต์"
     },
     "635": {
         "enUS": "Rogue Card Pack",
@@ -627,7 +627,7 @@
         "plPL": "Pakiet kart łotra",
         "ptPT": "Pacote de Cards de Ladino",
         "jaJP": "ローグカードパック",
-        "thTH": "ซองการ์ดโร้ก",
+        "thTH": "ซองการ์ดโร้ก"
     },
     "636": {
         "enUS": "Shaman Card Pack",
@@ -645,7 +645,7 @@
         "plPL": "Pakiet kart szamana",
         "ptPT": "Pacote de cards de Xamã",
         "jaJP": "シャーマンカードパック",
-        "thTH": "ซองการ์ดชาแมน",
+        "thTH": "ซองการ์ดชาแมน"
     },
     "638": {
         "enUS": "Demon Hunter Card Pack",
@@ -663,8 +663,9 @@
         "plPL": "Pakiet kart łowcy demonów",
         "ptPT": "Pacote de cards: Caçador de Demônios",
         "jaJP": "デーモンハンターカードパック",
-        "thTH": "ซองการ์ดดีมอนฮันเตอร์",
-    },    "631": {
+        "thTH": "ซองการ์ดดีมอนฮันเตอร์"
+    },
+    "631": {
         "enUS": "Standard Druid Pack",
         "enGB": "Standard Druid Pack",
         "frFR": "Standard Druid Pack",
@@ -680,7 +681,7 @@
         "plPL": "Standard Druid Pack",
         "ptPT": "Standard Druid Pack",
         "jaJP": "Standard Druid Pack",
-        "thTH": "Standard Druid Pack",
+        "thTH": "Standard Druid Pack"
     },
     "637": {
         "enUS": "Standard Warlock Pack",
@@ -698,6 +699,6 @@
         "plPL": "Standard Warlock Pack",
         "ptPT": "Standard Warlock Pack",
         "jaJP": "Standard Warlock Pack",
-        "thTH": "Standard Warlock Pack",
-    },
+        "thTH": "Standard Warlock Pack"
+    }
 }
