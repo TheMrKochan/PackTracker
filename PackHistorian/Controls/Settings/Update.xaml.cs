@@ -27,7 +27,7 @@ namespace PackTracker.Controls.Settings
             this.DataContext = Settings;
 
             this._updater = Updater;
-            this._timer = new Timer((new TimeSpan(0, 0, 10)).TotalMilliseconds) { AutoReset = false };
+            this._timer = new Timer(new TimeSpan(0, 0, 10).TotalMilliseconds) { AutoReset = false };
             this._timer.Elapsed += (sender, e) => this.Dispatcher.Invoke(() => this.btn_Refresh.IsEnabled = true);
 
             Loaded += this.Update_Loaded;
@@ -52,9 +52,8 @@ namespace PackTracker.Controls.Settings
 
             bw.RunWorkerCompleted += (sender, e) =>
             {
-                if (e.Result is IEnumerable<Release>)
+                if (e.Result is IEnumerable<Release> Result)
                 {
-                    var Result = (IEnumerable<Release>)e.Result;
                     this.InsertInlines(Result, this.txt_ChangeLog.Inlines);
                     this.btn_Update.IsEnabled = Result.Any(x => Updater.ParseVersion(x.tag_name) > Plugin.CurrentVersion);
                 }

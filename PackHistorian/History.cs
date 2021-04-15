@@ -41,30 +41,12 @@ namespace PackTracker
 
         public Pack First()
         {
-            var First = null as Pack;
-            foreach (var Pack in this._packs)
-            {
-                if (First == null || Pack.Time.Ticks < First.Time.Ticks)
-                {
-                    First = Pack;
-                }
-            }
-
-            return First;
+            return this._packs.OrderBy(p => p.Time.Ticks).FirstOrDefault();
         }
 
         public Pack Last()
         {
-            var Last = null as Pack;
-            foreach (var Pack in this._packs)
-            {
-                if (Last == null || Pack.Time.Ticks > Last.Time.Ticks)
-                {
-                    Last = Pack;
-                }
-            }
-
-            return Last;
+            return this._packs.OrderByDescending(p => p.Time.Ticks).FirstOrDefault();
         }
 
         public IEnumerator<Pack> GetEnumerator()

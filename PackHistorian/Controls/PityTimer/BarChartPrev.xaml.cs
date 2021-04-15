@@ -35,7 +35,7 @@ namespace PackTracker.Controls.PityTimer
 
         public int SoftThreshold { get; set; }
         public int Threshold { get; set; }
-        public int? Average => this.DataContext is View.PityTimer ? ((View.PityTimer)this.DataContext).Average : null;
+        public int? Average => this.DataContext is View.PityTimer timer ? timer.Average : null;
         public string XTitle { get; set; }
         public string YTitle { get; set; }
         public double? MaxValue { get; set; }
@@ -63,9 +63,8 @@ namespace PackTracker.Controls.PityTimer
             {
                 this._prevTimer.Clear();
 
-                if (e.NewValue is View.PityTimer)
+                if (e.NewValue is View.PityTimer pt)
                 {
-                    var pt = (View.PityTimer)e.NewValue;
                     this._prevTimer.AddRange(pt.Prev.Select(x => new ObservableValue(x)));
                     this._currTimer = new ObservableValue(pt.Current);
                     this._prevTimer.Add(this._currTimer);
@@ -75,11 +74,11 @@ namespace PackTracker.Controls.PityTimer
                     pt.PropertyChanged += this.CurrentChanged;
                 }
 
-                if (e.OldValue is View.PityTimer)
+                if (e.OldValue is View.PityTimer timer)
                 {
-                    ((View.PityTimer)e.OldValue).Prev.CollectionChanged -= this.PrevChanged;
-                    ((View.PityTimer)e.OldValue).PropertyChanged -= this.AverageChanged;
-                    ((View.PityTimer)e.OldValue).PropertyChanged -= this.CurrentChanged;
+                    timer.Prev.CollectionChanged -= this.PrevChanged;
+                    timer.PropertyChanged -= this.AverageChanged;
+                    timer.PropertyChanged -= this.CurrentChanged;
                 }
 
                 this.OnPropertyChanged("Average");
@@ -88,10 +87,9 @@ namespace PackTracker.Controls.PityTimer
 
         private void CurrentChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Current" && sender is View.PityTimer)
+            if (e.PropertyName == "Current" && sender is View.PityTimer timer)
             {
-                var pt = (View.PityTimer)sender;
-                this._currTimer.Value = pt.Current;
+                this._currTimer.Value = timer.Current;
             }
         }
 
@@ -105,9 +103,8 @@ namespace PackTracker.Controls.PityTimer
 
         private void PrevChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (this.DataContext is View.PityTimer)
+            if (this.DataContext is View.PityTimer pt)
             {
-                var pt = (View.PityTimer)this.DataContext;
                 this._currTimer = new ObservableValue(pt.Current);
                 this._prevTimer.Add(this._currTimer);
             }

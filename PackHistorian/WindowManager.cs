@@ -103,19 +103,19 @@ namespace PackTracker
 
         public void ShowManualInsertWin(History History)
         {
-            if (_manualInsertWin == null)
+            if (this._manualInsertWin == null)
             {
-                _manualInsertWin = new ManualPackInsert(History)
+                this._manualInsertWin = new ManualPackInsert(History)
                 {
                     Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
                 };
-                _manualInsertWin.Closed += (sender, e) => _manualInsertWin = null;
-                _manualInsertWin.Loaded += (sender, e) => _manualInsertWin.Title = _name + ": " + _manualInsertWin.Title;
+                this._manualInsertWin.Closed += (sender, e) => this._manualInsertWin = null;
+                this._manualInsertWin.Loaded += (sender, e) => this._manualInsertWin.Title = this._name + ": " + this._manualInsertWin.Title;
 
-                _manualInsertWin.Show();
+                this._manualInsertWin.Show();
             }
 
-            _manualInsertWin.Focus();
+            this._manualInsertWin.Focus();
         }
 
         public void ShowSettingsWin(Settings Settings, ISettingsStorage SettingsStorage, Type PreSelection = null)

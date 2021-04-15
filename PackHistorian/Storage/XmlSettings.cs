@@ -19,29 +19,22 @@ namespace PackTracker.Storage
 
                 if (Root != null)
                 {
-                    if (bool.TryParse(Root.SelectSingleNode("spoil").InnerText, out var spoil))
+                    if (bool.TryParse(Root.SelectSingleNode("spoil")?.InnerText, out var spoil))
                     {
                         Settings.Spoil = spoil;
                     }
 
-                    try
+                    if (bool.TryParse(Root.SelectSingleNode("pityoverlay")?.InnerText, out var pityoverlay))
                     {
-                        if (bool.TryParse(Root.SelectSingleNode("pityoverlay").InnerText, out var pityoverlay))
-                        {
-                            Settings.PityOverlay = pityoverlay;
-                        }
-                    }
-                    catch
-                    {
-                        Settings.PityOverlay = true;
+                        Settings.PityOverlay = pityoverlay;
                     }
 
-                    if (bool.TryParse(Root.SelectSingleNode("update").InnerText, out var update))
+                    if (bool.TryParse(Root.SelectSingleNode("update")?.InnerText, out var update))
                     {
                         Settings.Update = update;
                     }
 
-                    if (bool.TryParse(Root.SelectSingleNode("showuntracked").InnerText, out var showuntracked))
+                    if (bool.TryParse(Root.SelectSingleNode("showuntracked")?.InnerText, out var showuntracked))
                     {
                         Settings.ShowUntracked = showuntracked;
                     }
@@ -74,7 +67,6 @@ namespace PackTracker.Storage
             XmlNode showuntracked = Xml.CreateElement("showuntracked");
             showuntracked.InnerText = Settings.ShowUntracked.ToString();
             Root.AppendChild(showuntracked);
-
 
             var path = Path.Combine(Config.AppDataPath, "PackTracker");
             if (!Directory.Exists(path))

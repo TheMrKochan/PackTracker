@@ -57,9 +57,8 @@ namespace PackTracker.Controls
                 {
                     foreach (var Pack in e.NewItems)
                     {
-                        if (Pack is Entity.Pack)
+                        if (Pack is Entity.Pack NewPack)
                         {
-                            var NewPack = (Entity.Pack)Pack;
                             if (this._associatedPacks.ContainsKey(NewPack.Time.Date))
                             {
                                 this._associatedPacks[NewPack.Time.Date].Add(NewPack);
@@ -147,11 +146,10 @@ namespace PackTracker.Controls
 
         private void InitializeCalender(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count > 0 && sender is PackTracker.History)
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count > 0 && sender is PackTracker.History history)
             {
-                var History = (PackTracker.History)sender;
-                this.InitializeCalender(History);
-                History.CollectionChanged -= this.InitializeCalender;
+                this.InitializeCalender(history);
+                history.CollectionChanged -= this.InitializeCalender;
             }
         }
     }

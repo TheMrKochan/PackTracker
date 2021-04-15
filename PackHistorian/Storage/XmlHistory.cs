@@ -29,7 +29,6 @@ namespace PackTracker.Storage
                     {
                         foreach (XmlNode Pack in Packs)
                         {
-
                             if (int.TryParse(Pack.Attributes["id"]?.Value, out var packId) && long.TryParse(Pack.Attributes["time"]?.Value, out var ticks))
                             {
                                 var Time = new DateTime(ticks);

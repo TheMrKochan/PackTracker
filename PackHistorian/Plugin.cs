@@ -49,7 +49,6 @@ namespace PackTracker
 
             this._pityTimers = new View.Cache.PityTimerRepository(this._history);
 
-
             //watcher
             this._watcher.PackOpened += (sender, e) =>
             {
@@ -83,7 +82,7 @@ namespace PackTracker
                 Menu.mnu_Log.Click += (sender, e) => this._windows.ShowLogWin(this._history);
                 Menu.mnu_Search.Click += (sender, e) => this._windows.ShowSearchWin(this._history);
                 Menu.mnu_PityTimers.Click += (sender, e) => this._windows.ShowPityWin(this._settings, this._history, this._pityTimers);
-                Menu.mnu_ManualInsert.Click += (sender, e) => _windows.ShowManualInsertWin(_history);
+                Menu.mnu_ManualInsert.Click += (sender, e) => this._windows.ShowManualInsertWin(this._history);
                 return Menu;
             }
         }

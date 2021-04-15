@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using PackTracker.Entity;
 using PackTracker.View;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -25,32 +26,36 @@ namespace PackTracker.Controls
         {
             if (this.ShowUntracked)
             {
-                this._dropDown = new ObservableCollection<int>(PackNameConverter.PackNames.Keys);
+                var legacy = new List<int>();
+                if (e.NewValue is PackTracker.History hist)
+                {
+                    legacy = hist.Select(h => h.Id).ToList();
+                }
+                this._dropDown = new ObservableCollection<int>(PackNameConverter.PackNames.Keys.Concat(legacy).Distinct().OrderBy(x => x));
                 this.dd_Packs.ItemsSource = this._dropDown;
                 return;
             }
 
             this._dropDown.Clear();
 
-            if (e.NewValue is PackTracker.History)
+            if (e.NewValue is PackTracker.History newhist)
             {
-                var History = (PackTracker.History)e.NewValue;
-                this._dropDown = new ObservableCollection<int>(History.Select(x => x.Id).Distinct().OrderBy(x => x));
+                this._dropDown = new ObservableCollection<int>(newhist.Select(x => x.Id).Distinct().OrderBy(x => x));
                 this.dd_Packs.ItemsSource = this._dropDown;
-                History.CollectionChanged += this.DropDown_NewEntry;
+                newhist.CollectionChanged += this.DropDown_NewEntry;
             }
 
-            if (e.OldValue is PackTracker.History)
+            if (e.OldValue is PackTracker.History history)
             {
-                ((PackTracker.History)e.OldValue).CollectionChanged -= this.DropDown_NewEntry;
+                history.CollectionChanged -= this.DropDown_NewEntry;
             }
 
             if (this._dropDown.Count > 0)
             {
                 this.dd_Packs.SelectedIndex = -1;
-                if (e.NewValue is PackTracker.History)
+                if (e.NewValue is PackTracker.History history1)
                 {
-                    this.dd_Packs.SelectedItem = ((PackTracker.History)e.NewValue).Last().Id;
+                    this.dd_Packs.SelectedItem = history1.Last().Id;
                 }
                 else
                 {
