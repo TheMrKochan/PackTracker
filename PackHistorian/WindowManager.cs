@@ -16,11 +16,11 @@ namespace PackTracker
             this._name = name;
         }
 
-        public void ShowPityWin(History History, PityTimerRepository PityTimers)
+        public void ShowPityWin(Settings Settings, History History, PityTimerRepository PityTimers)
         {
             if (this._pityWin == null)
             {
-                this._pityWin = new Controls.PityTimer.PityTimer(History, PityTimers)
+                this._pityWin = new Controls.PityTimer.PityTimer(History, PityTimers, Settings)
                 {
                     Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
                 };
@@ -33,11 +33,11 @@ namespace PackTracker
             this._pityWin.Focus();
         }
 
-        public void ShowStatisticWin(History History)
+        public void ShowStatisticWin(Settings Settings, History History)
         {
             if (this._statisticWin == null)
             {
-                this._statisticWin = new Statistic(History)
+                this._statisticWin = new Statistic(History, Settings)
                 {
                     Owner = Hearthstone_Deck_Tracker.Core.MainWindow,
                 };
@@ -64,7 +64,7 @@ namespace PackTracker
                 this._historyWin.Show();
             }
 
-            this._historyWin.Focus(); ;
+            this._historyWin.Focus();
         }
 
         public void ShowLogWin(History History)

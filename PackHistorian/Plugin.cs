@@ -79,10 +79,10 @@ namespace PackTracker
             {
                 var Menu = new Controls.Menu();
                 Menu.mnu_History.Click += (sender, e) => this._windows.ShowHistoryWin(this._history);
-                Menu.mnu_Statistic.Click += (sender, e) => this._windows.ShowStatisticWin(this._history);
+                Menu.mnu_Statistic.Click += (sender, e) => this._windows.ShowStatisticWin(this._settings, this._history);
                 Menu.mnu_Log.Click += (sender, e) => this._windows.ShowLogWin(this._history);
                 Menu.mnu_Search.Click += (sender, e) => this._windows.ShowSearchWin(this._history);
-                Menu.mnu_PityTimers.Click += (sender, e) => this._windows.ShowPityWin(this._history, this._pityTimers);
+                Menu.mnu_PityTimers.Click += (sender, e) => this._windows.ShowPityWin(this._settings, this._history, this._pityTimers);
                 Menu.mnu_ManualInsert.Click += (sender, e) => _windows.ShowManualInsertWin(_history);
                 return Menu;
             }

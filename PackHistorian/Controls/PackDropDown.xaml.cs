@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using PackTracker.Entity;
+using PackTracker.View;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace PackTracker.Controls
     public partial class PackDropDown : SplitButton
     {
         private ObservableCollection<int> _dropDown;
+        internal bool ShowUntracked;
 
         public PackDropDown()
         {
@@ -21,6 +23,13 @@ namespace PackTracker.Controls
 
         private void dd_Packs_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            if (this.ShowUntracked)
+            {
+                this._dropDown = new ObservableCollection<int>(PackNameConverter.PackNames.Keys);
+                this.dd_Packs.ItemsSource = this._dropDown;
+                return;
+            }
+
             this._dropDown.Clear();
 
             if (e.NewValue is PackTracker.History)
@@ -29,9 +38,8 @@ namespace PackTracker.Controls
                 this._dropDown = new ObservableCollection<int>(History.Select(x => x.Id).Distinct().OrderBy(x => x));
                 this.dd_Packs.ItemsSource = this._dropDown;
                 History.CollectionChanged += this.DropDown_NewEntry;
-
-
             }
+
             if (e.OldValue is PackTracker.History)
             {
                 ((PackTracker.History)e.OldValue).CollectionChanged -= this.DropDown_NewEntry;

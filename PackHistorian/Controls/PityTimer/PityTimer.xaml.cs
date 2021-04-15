@@ -11,7 +11,7 @@ namespace PackTracker.Controls.PityTimer
     {
         private PityTimerRepository _pityTimers;
 
-        public PityTimer(PackTracker.History History, PityTimerRepository PityTimers)
+        public PityTimer(PackTracker.History History, PityTimerRepository PityTimers, PackTracker.Settings settings)
         {
             this.InitializeComponent();
 
@@ -26,6 +26,7 @@ namespace PackTracker.Controls.PityTimer
                 }
             };
 
+            this.dd_Packs.ShowUntracked = settings.ShowUntracked;
             Loaded += (sender, e) => this.dd_Packs.DataContext = History;
         }
     }

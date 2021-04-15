@@ -40,6 +40,11 @@ namespace PackTracker.Storage
                     {
                         Settings.Update = update;
                     }
+
+                    if (bool.TryParse(Root.SelectSingleNode("showuntracked").InnerText, out var showuntracked))
+                    {
+                        Settings.ShowUntracked = showuntracked;
+                    }
                 }
             }
 
@@ -65,6 +70,10 @@ namespace PackTracker.Storage
             XmlNode UpdateNode = Xml.CreateElement("update");
             UpdateNode.InnerText = Settings.Update.ToString();
             Root.AppendChild(UpdateNode);
+
+            XmlNode showuntracked = Xml.CreateElement("showuntracked");
+            showuntracked.InnerText = Settings.ShowUntracked.ToString();
+            Root.AppendChild(showuntracked);
 
 
             var path = Path.Combine(Config.AppDataPath, "PackTracker");

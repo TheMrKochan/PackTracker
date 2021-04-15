@@ -18,10 +18,10 @@ namespace PackTracker.Controls.Settings
         {
             this.InitializeComponent();
             this.lb_tabs.ItemsSource = new List<ITitledElement>() {
-        new General(Settings),
-        new Update(Settings, new Updater()),
-        new Credits(),
-      };
+                new General(Settings),
+                new Update(Settings, new Updater()),
+                new Credits(),
+            };
             this.lb_tabs.SelectedIndex = 0;
 
             this._settings = Settings;
